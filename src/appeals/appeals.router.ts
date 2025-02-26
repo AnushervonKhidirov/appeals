@@ -4,15 +4,16 @@ import { Router } from 'express'
 import { AppealsController } from './appeals.controller'
 
 export class AppealsRouter {
-  router: Router
-  controller: AppealsController
+  private readonly controller: AppealsController
+  readonly router: Router
 
   constructor(dataSource: DataSource) {
-    this.router = Router()
     this.controller = new AppealsController(dataSource)
+    this.router = Router()
+    this.init()
   }
 
-  init() {
+  private init() {
     this.router.get('/', this.controller.findAll.bind(this.controller))
     this.router.get('/:id', this.controller.findOne.bind(this.controller))
     this.router.post('/create', this.controller.create.bind(this.controller))
@@ -20,7 +21,5 @@ export class AppealsRouter {
     this.router.patch('/complete/:id', this.controller.setCompleted.bind(this.controller))
     this.router.patch('/cancel/:id', this.controller.setCanceled.bind(this.controller))
     this.router.delete('/:id')
-
-    return this.router
   }
 }

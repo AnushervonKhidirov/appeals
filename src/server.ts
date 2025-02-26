@@ -20,7 +20,7 @@ AppDataSource.initialize()
 function runServer(dataSource: DataSource) {
   const app = express()
 
-  const appealsRouter = new AppealsRouter(dataSource).init()
+  const appealsRouter = new AppealsRouter(dataSource).router
 
   app.use(express.json())
   app.use(cors())
