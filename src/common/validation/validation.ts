@@ -18,7 +18,12 @@ export class Validation {
   }
 
   IsNotEmpty() {
-    if (typeof this.value === 'string' && this.value.trim().length === 0) {
+    if (
+      (typeof this.value === 'string' && this.value.trim() === '') ||
+      (Array.isArray(this.value) && this.value.length === 0) ||
+      typeof this.value === 'undefined' ||
+      this.value === null
+    ) {
       this.errors.push(`'${this.field}' should not be empty`)
     }
 
