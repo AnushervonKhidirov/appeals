@@ -3,6 +3,7 @@ import type { Request, Response } from 'express'
 import { AppealEntity, AppealStatus } from './entity/appeals.entity'
 
 import { AppealsService } from './appeals.service'
+import { AppealsHelper } from './appeals.helper'
 
 import { BadRequestException } from '../common/exceptions/exceptions'
 import { CreateAppealsDto } from './dto/create-appeals.dto'
@@ -10,9 +11,11 @@ import { TAsyncMethodReturnWithError } from '../common/types/service-method.type
 
 export class AppealsController {
   private readonly appealsService: AppealsService
+  private readonly appealsHelper: AppealsHelper
 
   constructor(dataSource: DataSource) {
     this.appealsService = new AppealsService(dataSource)
+    this.appealsHelper = new AppealsHelper()
   }
 
   async findOne(req: Request, res: Response) {
@@ -31,11 +34,14 @@ export class AppealsController {
   }
 
   async findAll(req: Request, res: Response) {
-    const [appeals, err] = await this.appealsService.findAll()
+    const dateFilters = this.appealsHelper.getDateFilters(req.query)
+    const [appeals, err] = await this.appealsService.findAll(dateFilters)
+
     if (err) {
       res.status(err.statusCode).send(err)
       return
     }
+
     res.status(200).send(appeals)
   }
 
