@@ -4,6 +4,7 @@ import { AppealEntity, AppealStatus } from './entity/appeals.entity'
 
 import { AppealsService } from './appeals.service'
 import { AppealsHelper } from './appeals.helper'
+import { Validation } from '../common/validation/validation'
 
 import { BadRequestException } from '../common/exceptions/exceptions'
 import { CreateAppealsDto } from './dto/create-appeals.dto'
@@ -46,14 +47,12 @@ export class AppealsController {
   }
 
   async create(req: Request, res: Response) {
-    if (typeof req.body.text !== 'string') {
-      const exceptions = new BadRequestException("'text' field should be a string")
-      res.status(exceptions.statusCode).send(exceptions)
-      return
-    }
+    const textValidation = new Validation(req.body.text, 'text').IsString().IsNotEmpty()
+    const subjectValidation = new Validation(req.body.subject, 'subject').IsString().IsNotEmpty()
+    const validationErrors = [...textValidation.errors, ...subjectValidation.errors]
 
-    if (typeof req.body.text === 'string' && !req.body.text) {
-      const exceptions = new BadRequestException("'text' field should not be empty")
+    if (validationErrors.length > 0) {
+      const exceptions = new BadRequestException(validationErrors)
       res.status(exceptions.statusCode).send(exceptions)
       return
     }
