@@ -2,17 +2,8 @@
   "name": "appeals",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/AnushervonKhidirov/appeals#readme",
-  "bugs": {
-    "url": "https://github.com/AnushervonKhidirov/appeals/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AnushervonKhidirov/appeals.git"
-  },
   "license": "ISC",
   "author": "",
-  "type": "module",
   "main": "server.js",
   "scripts": {
     "start": "tsc -w | node --watch ./build/server.js"
