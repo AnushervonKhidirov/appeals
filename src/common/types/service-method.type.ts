@@ -1,4 +1,4 @@
-import { HttpException } from '../exceptions/exceptions'
+import { HttpException } from '../exceptions/exceptions';
 
-export type TMethodReturnWithError<T> = [T, null] | [null, HttpException]
-export type TAsyncMethodReturnWithError<T> = Promise<TMethodReturnWithError<T>>
+export type TMethodReturnWithError<T> = [T, null] | [null, HttpException];
+export type TAsyncMethodReturnWithError<T> = Promise<TMethodReturnWithError<T>>;

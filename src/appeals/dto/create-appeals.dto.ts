@@ -1,7 +1,7 @@
-import { AppealStatus } from '../entity/appeals.entity'
+import { AppealStatus } from '../entity/appeals.entity';
 
 export class CreateAppealsDto {
-  subject: string
-  text: string
-  status?: AppealStatus
+  subject: string;
+  text: string;
+  status?: AppealStatus;
 }

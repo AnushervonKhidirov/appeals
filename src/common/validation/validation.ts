@@ -1,30 +1,30 @@
 export class Validation {
-  private readonly value: unknown
-  private readonly field: string
-  errors: string[]
+  private readonly value: unknown;
+  private readonly field: string;
+  errors: string[];
 
   constructor(value: unknown, field: string) {
-    this.value = value
-    this.field = field
-    this.errors = []
+    this.value = value;
+    this.field = field;
+    this.errors = [];
   }
 
   IsString() {
     if (typeof this.value !== 'string') {
-      this.errors.push(`'${this.field}' should be a string`)
+      this.errors.push(`'${this.field}' should be a string`);
     }
 
-    return this
+    return this;
   }
 
   IsNumberString() {
-    const regex = /^\d+$/
+    const regex = /^\d+$/;
 
     if (typeof this.value !== 'string' || !regex.test(this.value)) {
-      this.errors.push(`'${this.field}' should be a numeric string`)
+      this.errors.push(`'${this.field}' should be a numeric string`);
     }
 
-    return this
+    return this;
   }
 
   IsNotEmpty() {
@@ -34,9 +34,9 @@ export class Validation {
       typeof this.value === 'undefined' ||
       this.value === null
     ) {
-      this.errors.push(`'${this.field}' should not be empty`)
+      this.errors.push(`'${this.field}' should not be empty`);
     }
 
-    return this
+    return this;
   }
 }

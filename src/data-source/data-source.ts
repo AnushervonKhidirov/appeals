@@ -1,6 +1,6 @@
-import type { DataSourceOptions } from 'typeorm'
-import { DataSource } from 'typeorm'
-import { AppealEntity } from '../appeals/entity/appeals.entity'
+import type { DataSourceOptions } from 'typeorm';
+import { DataSource } from 'typeorm';
+import { AppealEntity } from '../appeals/entity/appeals.entity';
 
 export const dataSourceOptions: DataSourceOptions = {
   type: 'mysql',
@@ -10,6 +10,6 @@ export const dataSourceOptions: DataSourceOptions = {
   database: process.env.DB_NAME,
   synchronize: true,
   entities: [AppealEntity],
-}
+};
 
-export const AppDataSource = new DataSource(dataSourceOptions)
+export const AppDataSource = new DataSource(dataSourceOptions);
