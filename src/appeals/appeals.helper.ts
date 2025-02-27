@@ -1,5 +1,8 @@
 import { FindManyOptions, MoreThanOrEqual, Between, LessThanOrEqual } from 'typeorm';
 import { AppealEntity } from './entity/appeals.entity';
+import { TMethodReturnWithError } from '../common/types/service-method.type';
+import { BadRequestException, HttpException } from '../common/exceptions/exceptions';
+import { Validation } from '../common/validation/validation';
 
 export class AppealsHelper {
   getDateFilters({ from, to, date }: { from?: string; to?: string; date?: string }) {
@@ -29,5 +32,15 @@ export class AppealsHelper {
     }
 
     return dateFilters;
+  }
+
+  crateAppealValidation(body: { [key: string]: unknown }): HttpException | void {
+    const textValidation = new Validation(body.text, 'text').IsString().IsNotEmpty();
+    const subjectValidation = new Validation(body.subject, 'subject').IsString().IsNotEmpty();
+    const validationErrors = [...textValidation.errors, ...subjectValidation.errors];
+
+    if (validationErrors.length > 0) {
+      return new BadRequestException(validationErrors);
+    }
   }
 }

@@ -51,13 +51,10 @@ export class AppealsController {
   }
 
   async create(req: Request, res: Response) {
-    const textValidation = new Validation(req.body.text, 'text').IsString().IsNotEmpty();
-    const subjectValidation = new Validation(req.body.subject, 'subject').IsString().IsNotEmpty();
-    const validationErrors = [...textValidation.errors, ...subjectValidation.errors];
+    const validationErr = this.appealsHelper.crateAppealValidation(req.body);
 
-    if (validationErrors.length > 0) {
-      const exceptions = new BadRequestException(validationErrors);
-      res.status(exceptions.statusCode).send(exceptions);
+    if (validationErr) {
+      res.status(validationErr.statusCode).send(validationErr);
       return;
     }
 
