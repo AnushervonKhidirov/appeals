@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
 
 export enum AppealStatus {
   NEW = 'new',
@@ -10,17 +10,20 @@ export enum AppealStatus {
 @Entity({ name: 'appeals' })
 export class AppealEntity {
   @PrimaryGeneratedColumn()
-  id: number
+  id: number;
 
   @Column()
-  subject: string
+  subject: string;
 
-  @Column()
-  text: string
+  @Column({ type: 'text' })
+  text: string;
 
   @Column({ type: 'enum', enum: AppealStatus, default: AppealStatus.NEW })
-  status: AppealStatus
+  status: AppealStatus;
+
+  @Column({ name: 'result_message', type: 'text', nullable: true })
+  resultMessage: string | null;
 
   @CreateDateColumn({ name: 'created_at' })
-  createdAt: Date
+  createdAt: Date;
 }
