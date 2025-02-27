@@ -17,6 +17,16 @@ export class Validation {
     return this
   }
 
+  IsNumberString() {
+    const regex = /^\d+$/
+
+    if (typeof this.value !== 'string' || !regex.test(this.value)) {
+      this.errors.push(`'${this.field}' should be a numeric string`)
+    }
+
+    return this
+  }
+
   IsNotEmpty() {
     if (
       (typeof this.value === 'string' && this.value.trim() === '') ||
