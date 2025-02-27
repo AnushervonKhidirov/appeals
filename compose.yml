@@ -26,6 +26,7 @@ services:
   db:
     image: mysql:lts
     restart: always
+    command: --init-file /data/application/init.sql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       interval: 5s
@@ -37,3 +38,4 @@ services:
       - MYSQL_DATABASE=${DB_NAME}
     volumes:
       - ./db_data:/var/lib/mysql
+      - ./init.sql:/data/application/init.sql
