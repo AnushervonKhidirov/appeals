@@ -1,6 +1,6 @@
 import type { Repository, DataSource, FindOptionsWhere, FindManyOptions } from 'typeorm'
 import { TAsyncMethodReturnWithError } from '../common/types/service-method.type'
-import { AppealEntity } from './entity/appeals.entity'
+import { AppealEntity, AppealStatus } from './entity/appeals.entity'
 
 import { CreateAppealsDto } from './dto/create-appeals.dto'
 import { UpdateAppealsDto } from './dto/update-appeals.dto'
@@ -46,5 +46,22 @@ export class AppealsService {
     if (!updatedAppeal) return [null, new InternalServerErrorException()]
 
     return [updatedAppeal, null]
+  }
+
+  async cancelAllInProgress(): TAsyncMethodReturnWithError<AppealEntity[]> {
+    const [appeals, err] = await this.findAll({ where: { status: AppealStatus.IN_PROGRESS } })
+    if (err) return [null, err]
+
+    const newAppeals = this.repository.create(
+      appeals.map(appeal => ({
+        ...appeal,
+        status: AppealStatus.CANCELLED,
+      })),
+    )
+
+    const updatedAppeals = await this.repository.save(newAppeals)
+    if (!Array.isArray(updatedAppeals)) return [null, new InternalServerErrorException()]
+
+    return [updatedAppeals, null]
   }
 }

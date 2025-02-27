@@ -20,6 +20,7 @@ export class AppealsRouter {
     this.router.patch('/set_in_progress/:id', this.controller.setInProgress.bind(this.controller))
     this.router.patch('/complete/:id', this.controller.setCompleted.bind(this.controller))
     this.router.patch('/cancel/:id', this.controller.setCanceled.bind(this.controller))
+    this.router.patch('/cancel_all_in_progress', this.controller.cancelAllInProgress.bind(this.controller))
     this.router.delete('/:id')
   }
 }

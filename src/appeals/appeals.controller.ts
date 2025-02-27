@@ -104,6 +104,17 @@ export class AppealsController {
     res.status(200).send(appeal)
   }
 
+  async cancelAllInProgress(req: Request, res: Response) {
+    const [appeals, err] = await this.appealsService.cancelAllInProgress()
+
+    if (err) {
+      res.status(err.statusCode).send(err)
+      return
+    }
+
+    res.status(200).send(appeals)
+  }
+
   private async updateAppealStatus(id: string, status: AppealStatus): TAsyncMethodReturnWithError<AppealEntity> {
     const idValidation = new Validation(id, 'id').IsNumberString()
 
