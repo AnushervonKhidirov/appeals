@@ -20,13 +20,16 @@ export class AppealsController {
   }
 
   async findOne(req: Request, res: Response) {
-    if (!req.params.id) {
-      const exceptions = new BadRequestException()
+    const idValidation = new Validation(req.params.id, 'id').IsNumberString()
+
+    if (idValidation.errors.length > 0) {
+      const exceptions = new BadRequestException(idValidation.errors)
       res.status(exceptions.statusCode).send(exceptions)
       return
     }
 
     const [appeal, err] = await this.appealsService.findOne({ id: +req.params.id })
+
     if (err) {
       res.status(err.statusCode).send(err)
       return
@@ -69,7 +72,7 @@ export class AppealsController {
   }
 
   async setInProgress(req: Request, res: Response) {
-    const [appeal, err] = await this.updateAppealStatus({ id: req.params.id, status: AppealStatus.IN_PROGRESS })
+    const [appeal, err] = await this.updateAppealStatus(req.params.id, AppealStatus.IN_PROGRESS)
 
     if (err) {
       res.status(err.statusCode).send(err)
@@ -80,7 +83,7 @@ export class AppealsController {
   }
 
   async setCompleted(req: Request, res: Response) {
-    const [appeal, err] = await this.updateAppealStatus({ id: req.params.id, status: AppealStatus.COMPLETED })
+    const [appeal, err] = await this.updateAppealStatus(req.params.id, AppealStatus.COMPLETED)
 
     if (err) {
       res.status(err.statusCode).send(err)
@@ -91,7 +94,7 @@ export class AppealsController {
   }
 
   async setCanceled(req: Request, res: Response) {
-    const [appeal, err] = await this.updateAppealStatus({ id: req.params.id, status: AppealStatus.CANCELLED })
+    const [appeal, err] = await this.updateAppealStatus(req.params.id, AppealStatus.CANCELLED)
 
     if (err) {
       res.status(err.statusCode).send(err)
@@ -101,14 +104,12 @@ export class AppealsController {
     res.status(200).send(appeal)
   }
 
-  private async updateAppealStatus({
-    id,
-    status,
-  }: {
-    id?: string
-    status: AppealStatus
-  }): TAsyncMethodReturnWithError<AppealEntity> {
-    if (!id) return [null, new BadRequestException()]
+  private async updateAppealStatus(id: string, status: AppealStatus): TAsyncMethodReturnWithError<AppealEntity> {
+    const idValidation = new Validation(id, 'id').IsNumberString()
+
+    if (idValidation.errors.length > 0) {
+      return [null, new BadRequestException(idValidation.errors)]
+    }
 
     const [updatedAppeal, updateErr] = await this.appealsService.update(+id, { status })
     if (updateErr) return [null, updateErr]
